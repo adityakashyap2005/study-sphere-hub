@@ -3,10 +3,11 @@ import { supabase } from '@/integrations/supabase/client';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, Filter, SortAsc, ShoppingCart } from 'lucide-react';
+import { Search, Filter, SortAsc, ShoppingCart, GraduationCap } from 'lucide-react';
 import FileCard from '@/components/FileCard';
+import PremiumCourseCard from '@/components/PremiumCourseCard';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { QRCodeSVG } from 'qrcode.react';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -33,6 +34,73 @@ const sortOptions = [
   { value: 'rating', label: 'Highest Rated' },
 ];
 
+const premiumCourses = [
+  {
+    id: 1,
+    title: 'HTML',
+    description: 'HTML is the standard markup language used to create web pages...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
+    price: '₹99',
+    bgColor: 'bg-orange-500'
+  },
+  {
+    id: 2,
+    title: 'CSS',
+    description: 'CSS is a cornerstone technology used for describing the presentation...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg',
+    price: '₹99',
+    bgColor: 'bg-blue-500'
+  },
+  {
+    id: 3,
+    title: 'C',
+    description: 'The C programming language, developed in the early 1970s by Dennis Ritchie...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg',
+    price: '₹149',
+    bgColor: 'bg-indigo-600'
+  },
+  {
+    id: 4,
+    title: 'C++',
+    description: 'C++ is a versatile and powerful programming language that combines the efficiency...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
+    price: '₹149',
+    bgColor: 'bg-pink-600'
+  },
+  {
+    id: 5,
+    title: 'JavaScript',
+    description: 'JavaScript is a versatile programming language that enables interactive web experiences...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+    price: '₹199',
+    bgColor: 'bg-yellow-500'
+  },
+  {
+    id: 6,
+    title: 'Java',
+    description: 'Java is a versatile and powerful programming language that has been a cornerstone...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+    price: '₹199',
+    bgColor: 'bg-red-500'
+  },
+  {
+    id: 7,
+    title: 'Python',
+    description: 'Python is a high-level programming language known for its simplicity and readability...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+    price: '₹249',
+    bgColor: 'bg-blue-600'
+  },
+  {
+    id: 8,
+    title: 'PHP',
+    description: 'PHP is a popular server-side scripting language designed for web development...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg',
+    price: '₹149',
+    bgColor: 'bg-purple-600'
+  }
+];
+
 const Home = () => {
   const { user } = useAuth();
   const [files, setFiles] = useState<FileWithProfile[]>([]);
@@ -42,6 +110,7 @@ const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('recent');
   const [qrDialogOpen, setQrDialogOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<typeof premiumCourses[0] | null>(null);
 
   useEffect(() => {
     fetchFiles();
@@ -100,6 +169,11 @@ const Home = () => {
     setFilteredFiles(result);
   };
 
+  const handleBuyCourse = (course: typeof premiumCourses[0]) => {
+    setSelectedCourse(course);
+    setQrDialogOpen(true);
+  };
+
   return (
     <div className="space-y-8 pb-20 md:pb-8">
       {/* Hero Section */}
@@ -119,39 +193,76 @@ const Home = () => {
             <Button variant="outline" className="smooth-transition hover:bg-secondary">
               Upload Your Files
             </Button>
-            {user && (
-              <Dialog open={qrDialogOpen} onOpenChange={setQrDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="secondary" className="smooth-transition hover:shadow-lg hover:scale-105">
-                    <ShoppingCart className="mr-2 h-4 w-4" />
-                    Buy Premium Notes
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Buy Premium Notes</DialogTitle>
-                    <DialogDescription>
-                      Scan the QR code below to complete your payment and get access to premium notes
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="flex flex-col items-center justify-center p-6 space-y-4">
-                    <div className="bg-white p-4 rounded-lg">
-                      <QRCodeSVG 
-                        value="upi://pay?pa=example@upi&pn=College%20Resource%20Hub&am=99&cu=INR" 
-                        size={200}
-                        level="H"
-                      />
-                    </div>
-                    <p className="text-sm text-muted-foreground text-center">
-                      Scan with any UPI app to pay ₹99
-                    </p>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            )}
           </div>
         </div>
       </div>
+
+      {/* Premium Courses Section */}
+      {user && (
+        <div className="space-y-6 animate-fade-in-up">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-3xl font-bold flex items-center gap-2">
+                <GraduationCap className="h-8 w-8 text-primary" />
+                Premium Courses
+              </h2>
+              <p className="text-muted-foreground mt-2">
+                Master programming languages with our comprehensive courses
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {premiumCourses.map((course, index) => (
+              <div
+                key={course.id}
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <PremiumCourseCard
+                  title={course.title}
+                  description={course.description}
+                  image={course.image}
+                  price={course.price}
+                  bgColor={course.bgColor}
+                  onBuyClick={() => handleBuyCourse(course)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* QR Code Payment Dialog */}
+      <Dialog open={qrDialogOpen} onOpenChange={setQrDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedCourse ? `Buy ${selectedCourse.title} Course` : 'Buy Premium Course'}
+            </DialogTitle>
+            <DialogDescription>
+              Scan the QR code below to complete your payment
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col items-center justify-center p-6 space-y-4">
+            <div className="bg-white p-4 rounded-lg">
+              <QRCodeSVG 
+                value={`upi://pay?pa=example@upi&pn=College%20Resource%20Hub&am=${selectedCourse?.price.replace('₹', '')}&cu=INR&tn=${selectedCourse?.title}%20Course`}
+                size={200}
+                level="H"
+              />
+            </div>
+            <div className="text-center space-y-2">
+              <p className="text-2xl font-bold text-primary">
+                {selectedCourse?.price}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Scan with any UPI app to pay
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Search and Filters */}
       <div className="glass-card card-shadow p-6 space-y-4 animate-fade-in-up">
