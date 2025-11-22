@@ -3,9 +3,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, Filter, SortAsc } from 'lucide-react';
+import { Search, Filter, SortAsc, ShoppingCart } from 'lucide-react';
 import FileCard from '@/components/FileCard';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { QRCodeSVG } from 'qrcode.react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface FileWithProfile {
   id: string;
@@ -31,12 +34,14 @@ const sortOptions = [
 ];
 
 const Home = () => {
+  const { user } = useAuth();
   const [files, setFiles] = useState<FileWithProfile[]>([]);
   const [filteredFiles, setFilteredFiles] = useState<FileWithProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('recent');
+  const [qrDialogOpen, setQrDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchFiles();
@@ -107,13 +112,43 @@ const Home = () => {
           <p className="text-lg text-muted-foreground mb-6">
             Access thousands of study materials, notes, and resources shared by students like you
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             <Button className="gradient-primary smooth-transition hover:shadow-lg hover:scale-105">
               Browse Resources
             </Button>
             <Button variant="outline" className="smooth-transition hover:bg-secondary">
               Upload Your Files
             </Button>
+            {user && (
+              <Dialog open={qrDialogOpen} onOpenChange={setQrDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="secondary" className="smooth-transition hover:shadow-lg hover:scale-105">
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    Buy Premium Notes
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Buy Premium Notes</DialogTitle>
+                    <DialogDescription>
+                      Scan the QR code below to complete your payment and get access to premium notes
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="flex flex-col items-center justify-center p-6 space-y-4">
+                    <div className="bg-white p-4 rounded-lg">
+                      <QRCodeSVG 
+                        value="upi://pay?pa=example@upi&pn=College%20Resource%20Hub&am=99&cu=INR" 
+                        size={200}
+                        level="H"
+                      />
+                    </div>
+                    <p className="text-sm text-muted-foreground text-center">
+                      Scan with any UPI app to pay ₹99
+                    </p>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            )}
           </div>
         </div>
       </div>
