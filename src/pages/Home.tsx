@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, Filter, SortAsc, ShoppingCart, GraduationCap } from 'lucide-react';
+import { Search, Filter, SortAsc, ShoppingCart, GraduationCap, BookOpen, FileText } from 'lucide-react';
 import FileCard from '@/components/FileCard';
 import PremiumCourseCard from '@/components/PremiumCourseCard';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -101,6 +101,108 @@ const premiumCourses = [
   }
 ];
 
+const eBooks = [
+  {
+    id: 1,
+    title: 'C Programming',
+    description: 'Complete guide to C programming with examples and exercises...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg',
+    price: '₹79',
+    bgColor: 'bg-indigo-600'
+  },
+  {
+    id: 2,
+    title: 'C++ Mastery',
+    description: 'Master object-oriented programming with C++ from basics to advanced...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
+    price: '₹79',
+    bgColor: 'bg-pink-600'
+  },
+  {
+    id: 3,
+    title: 'Java Complete Guide',
+    description: 'Comprehensive Java programming e-book with real-world projects...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+    price: '₹99',
+    bgColor: 'bg-red-500'
+  },
+  {
+    id: 4,
+    title: 'Web Development',
+    description: 'Full-stack web development covering HTML, CSS, JavaScript and more...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
+    price: '₹129',
+    bgColor: 'bg-orange-500'
+  }
+];
+
+const pyqBooks = [
+  {
+    id: 1,
+    title: 'Semester 1 PYQ',
+    description: 'Previous year question papers for Semester 1 with solutions...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+    price: '₹49',
+    bgColor: 'bg-blue-600'
+  },
+  {
+    id: 2,
+    title: 'Semester 2 PYQ',
+    description: 'Previous year question papers for Semester 2 with solutions...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+    price: '₹49',
+    bgColor: 'bg-green-600'
+  },
+  {
+    id: 3,
+    title: 'Semester 3 PYQ',
+    description: 'Previous year question papers for Semester 3 with solutions...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+    price: '₹49',
+    bgColor: 'bg-purple-600'
+  },
+  {
+    id: 4,
+    title: 'Semester 4 PYQ',
+    description: 'Previous year question papers for Semester 4 with solutions...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+    price: '₹49',
+    bgColor: 'bg-yellow-600'
+  },
+  {
+    id: 5,
+    title: 'Semester 5 PYQ',
+    description: 'Previous year question papers for Semester 5 with solutions...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+    price: '₹49',
+    bgColor: 'bg-red-600'
+  },
+  {
+    id: 6,
+    title: 'Semester 6 PYQ',
+    description: 'Previous year question papers for Semester 6 with solutions...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+    price: '₹49',
+    bgColor: 'bg-indigo-600'
+  },
+  {
+    id: 7,
+    title: 'Semester 7 PYQ',
+    description: 'Previous year question papers for Semester 7 with solutions...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+    price: '₹49',
+    bgColor: 'bg-pink-600'
+  },
+  {
+    id: 8,
+    title: 'Semester 8 PYQ',
+    description: 'Previous year question papers for Semester 8 with solutions...',
+    image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+    price: '₹49',
+    bgColor: 'bg-teal-600'
+  }
+];
+
 const Home = () => {
   const { user } = useAuth();
   const [files, setFiles] = useState<FileWithProfile[]>([]);
@@ -169,7 +271,7 @@ const Home = () => {
     setFilteredFiles(result);
   };
 
-  const handleBuyCourse = (course: typeof premiumCourses[0]) => {
+  const handleBuyCourse = (course: typeof premiumCourses[0] | typeof eBooks[0] | typeof pyqBooks[0]) => {
     setSelectedCourse(course);
     setQrDialogOpen(true);
   };
@@ -226,6 +328,78 @@ const Home = () => {
                   price={course.price}
                   bgColor={course.bgColor}
                   onBuyClick={() => handleBuyCourse(course)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* E-Books Section */}
+      {user && (
+        <div className="space-y-6 animate-fade-in-up">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-3xl font-bold flex items-center gap-2">
+                <BookOpen className="h-8 w-8 text-primary" />
+                E-Books
+              </h2>
+              <p className="text-muted-foreground mt-2">
+                Download comprehensive e-books for various programming subjects
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {eBooks.map((ebook, index) => (
+              <div
+                key={ebook.id}
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <PremiumCourseCard
+                  title={ebook.title}
+                  description={ebook.description}
+                  image={ebook.image}
+                  price={ebook.price}
+                  bgColor={ebook.bgColor}
+                  onBuyClick={() => handleBuyCourse(ebook)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* PYQ Section */}
+      {user && (
+        <div className="space-y-6 animate-fade-in-up">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-3xl font-bold flex items-center gap-2">
+                <FileText className="h-8 w-8 text-primary" />
+                Previous Year Questions (PYQ)
+              </h2>
+              <p className="text-muted-foreground mt-2">
+                Access semester-wise previous year question papers with solutions
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {pyqBooks.map((pyq, index) => (
+              <div
+                key={pyq.id}
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
+                <PremiumCourseCard
+                  title={pyq.title}
+                  description={pyq.description}
+                  image={pyq.image}
+                  price={pyq.price}
+                  bgColor={pyq.bgColor}
+                  onBuyClick={() => handleBuyCourse(pyq)}
                 />
               </div>
             ))}
