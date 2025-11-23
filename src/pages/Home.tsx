@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { QRCodeSVG } from 'qrcode.react';
 import { useAuth } from '@/contexts/AuthContext';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 interface FileWithProfile {
   id: string;
@@ -107,7 +108,7 @@ const eBooks = [
     title: 'C Programming',
     description: 'Complete guide to C programming with examples and exercises...',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg',
-    price: '₹79',
+    price: 'Free',
     bgColor: 'bg-indigo-600'
   },
   {
@@ -115,7 +116,7 @@ const eBooks = [
     title: 'C++ Mastery',
     description: 'Master object-oriented programming with C++ from basics to advanced...',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
-    price: '₹79',
+    price: 'Free',
     bgColor: 'bg-pink-600'
   },
   {
@@ -123,7 +124,7 @@ const eBooks = [
     title: 'Java Complete Guide',
     description: 'Comprehensive Java programming e-book with real-world projects...',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
-    price: '₹99',
+    price: 'Free',
     bgColor: 'bg-red-500'
   },
   {
@@ -131,7 +132,7 @@ const eBooks = [
     title: 'Web Development',
     description: 'Full-stack web development covering HTML, CSS, JavaScript and more...',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
-    price: '₹129',
+    price: 'Free',
     bgColor: 'bg-orange-500'
   }
 ];
@@ -142,7 +143,7 @@ const pyqBooks = [
     title: 'Semester 1 PYQ',
     description: 'Previous year question papers for Semester 1 with solutions...',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-    price: '₹49',
+    price: 'Free',
     bgColor: 'bg-blue-600'
   },
   {
@@ -150,7 +151,7 @@ const pyqBooks = [
     title: 'Semester 2 PYQ',
     description: 'Previous year question papers for Semester 2 with solutions...',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-    price: '₹49',
+    price: 'Free',
     bgColor: 'bg-green-600'
   },
   {
@@ -158,7 +159,7 @@ const pyqBooks = [
     title: 'Semester 3 PYQ',
     description: 'Previous year question papers for Semester 3 with solutions...',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-    price: '₹49',
+    price: 'Free',
     bgColor: 'bg-purple-600'
   },
   {
@@ -166,7 +167,7 @@ const pyqBooks = [
     title: 'Semester 4 PYQ',
     description: 'Previous year question papers for Semester 4 with solutions...',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-    price: '₹49',
+    price: 'Free',
     bgColor: 'bg-yellow-600'
   },
   {
@@ -174,7 +175,7 @@ const pyqBooks = [
     title: 'Semester 5 PYQ',
     description: 'Previous year question papers for Semester 5 with solutions...',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-    price: '₹49',
+    price: 'Free',
     bgColor: 'bg-red-600'
   },
   {
@@ -182,7 +183,7 @@ const pyqBooks = [
     title: 'Semester 6 PYQ',
     description: 'Previous year question papers for Semester 6 with solutions...',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-    price: '₹49',
+    price: 'Free',
     bgColor: 'bg-indigo-600'
   },
   {
@@ -190,7 +191,7 @@ const pyqBooks = [
     title: 'Semester 7 PYQ',
     description: 'Previous year question papers for Semester 7 with solutions...',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-    price: '₹49',
+    price: 'Free',
     bgColor: 'bg-pink-600'
   },
   {
@@ -198,7 +199,7 @@ const pyqBooks = [
     title: 'Semester 8 PYQ',
     description: 'Previous year question papers for Semester 8 with solutions...',
     image: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-    price: '₹49',
+    price: 'Free',
     bgColor: 'bg-teal-600'
   }
 ];
@@ -299,111 +300,127 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Premium Courses Section */}
+      {/* Premium Content Section with Tabs */}
       {user && (
         <div className="space-y-6 animate-fade-in-up">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-3xl font-bold flex items-center gap-2">
-                <GraduationCap className="h-8 w-8 text-primary" />
-                Premium Courses
-              </h2>
-              <p className="text-muted-foreground mt-2">
-                Master programming languages with our comprehensive courses
-              </p>
-            </div>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {premiumCourses.map((course, index) => (
-              <div
-                key={course.id}
-                className="animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <PremiumCourseCard
-                  title={course.title}
-                  description={course.description}
-                  image={course.image}
-                  price={course.price}
-                  bgColor={course.bgColor}
-                  onBuyClick={() => handleBuyCourse(course)}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* E-Books Section */}
-      {user && (
-        <div className="space-y-6 animate-fade-in-up">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-3xl font-bold flex items-center gap-2">
-                <BookOpen className="h-8 w-8 text-primary" />
+          <Tabs defaultValue="courses" className="w-full">
+            <TabsList className="grid w-full max-w-md mx-auto grid-cols-3 mb-8">
+              <TabsTrigger value="courses" className="flex items-center gap-2">
+                <GraduationCap className="h-4 w-4" />
+                Courses
+              </TabsTrigger>
+              <TabsTrigger value="ebooks" className="flex items-center gap-2">
+                <BookOpen className="h-4 w-4" />
                 E-Books
-              </h2>
-              <p className="text-muted-foreground mt-2">
-                Download comprehensive e-books for various programming subjects
-              </p>
-            </div>
-          </div>
+              </TabsTrigger>
+              <TabsTrigger value="pyq" className="flex items-center gap-2">
+                <FileText className="h-4 w-4" />
+                PYQ
+              </TabsTrigger>
+            </TabsList>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {eBooks.map((ebook, index) => (
-              <div
-                key={ebook.id}
-                className="animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <PremiumCourseCard
-                  title={ebook.title}
-                  description={ebook.description}
-                  image={ebook.image}
-                  price={ebook.price}
-                  bgColor={ebook.bgColor}
-                  onBuyClick={() => handleBuyCourse(ebook)}
-                />
+            {/* Premium Courses Tab */}
+            <TabsContent value="courses" className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-3xl font-bold flex items-center gap-2">
+                    <GraduationCap className="h-8 w-8 text-primary" />
+                    Premium Courses
+                  </h2>
+                  <p className="text-muted-foreground mt-2">
+                    Master programming languages with our comprehensive courses
+                  </p>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
 
-      {/* PYQ Section */}
-      {user && (
-        <div className="space-y-6 animate-fade-in-up">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-3xl font-bold flex items-center gap-2">
-                <FileText className="h-8 w-8 text-primary" />
-                Previous Year Questions (PYQ)
-              </h2>
-              <p className="text-muted-foreground mt-2">
-                Access semester-wise previous year question papers with solutions
-              </p>
-            </div>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {pyqBooks.map((pyq, index) => (
-              <div
-                key={pyq.id}
-                className="animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <PremiumCourseCard
-                  title={pyq.title}
-                  description={pyq.description}
-                  image={pyq.image}
-                  price={pyq.price}
-                  bgColor={pyq.bgColor}
-                  onBuyClick={() => handleBuyCourse(pyq)}
-                />
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                {premiumCourses.map((course, index) => (
+                  <div
+                    key={course.id}
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <PremiumCourseCard
+                      title={course.title}
+                      description={course.description}
+                      image={course.image}
+                      price={course.price}
+                      bgColor={course.bgColor}
+                      onBuyClick={() => handleBuyCourse(course)}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </TabsContent>
+
+            {/* E-Books Tab */}
+            <TabsContent value="ebooks" className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-3xl font-bold flex items-center gap-2">
+                    <BookOpen className="h-8 w-8 text-primary" />
+                    E-Books
+                  </h2>
+                  <p className="text-muted-foreground mt-2">
+                    Download comprehensive e-books for various programming subjects - Free!
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                {eBooks.map((ebook, index) => (
+                  <div
+                    key={ebook.id}
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <PremiumCourseCard
+                      title={ebook.title}
+                      description={ebook.description}
+                      image={ebook.image}
+                      price={ebook.price}
+                      bgColor={ebook.bgColor}
+                      onBuyClick={() => {}}
+                    />
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+
+            {/* PYQ Tab */}
+            <TabsContent value="pyq" className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-3xl font-bold flex items-center gap-2">
+                    <FileText className="h-8 w-8 text-primary" />
+                    Previous Year Questions (PYQ)
+                  </h2>
+                  <p className="text-muted-foreground mt-2">
+                    Access semester-wise previous year question papers with solutions - Free!
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                {pyqBooks.map((pyq, index) => (
+                  <div
+                    key={pyq.id}
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <PremiumCourseCard
+                      title={pyq.title}
+                      description={pyq.description}
+                      image={pyq.image}
+                      price={pyq.price}
+                      bgColor={pyq.bgColor}
+                      onBuyClick={() => {}}
+                    />
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       )}
 

@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Download } from 'lucide-react';
 
 interface PremiumCourseCardProps {
   title: string;
@@ -13,6 +13,8 @@ interface PremiumCourseCardProps {
 }
 
 const PremiumCourseCard = ({ title, description, image, price, bgColor, onBuyClick }: PremiumCourseCardProps) => {
+  const isFree = price === 'Free';
+  
   return (
     <Card className="glass-card card-shadow overflow-hidden group hover:scale-105 smooth-transition">
       <div className={`relative h-48 ${bgColor} flex items-center justify-center p-6`}>
@@ -40,15 +42,26 @@ const PremiumCourseCard = ({ title, description, image, price, bgColor, onBuyCli
         </div>
         
         <div className="flex items-center justify-between">
-          <Badge variant="secondary" className="text-lg font-bold">
+          <Badge variant={isFree ? "secondary" : "default"} className={`text-lg font-bold ${isFree ? 'bg-green-600 text-white' : ''}`}>
             {price}
           </Badge>
-          <Button 
-            onClick={onBuyClick}
-            className="bg-green-600 hover:bg-green-700 text-white"
-          >
-            Buy Now
-          </Button>
+          {!isFree && (
+            <Button 
+              onClick={onBuyClick}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              Buy Now
+            </Button>
+          )}
+          {isFree && (
+            <Button 
+              variant="secondary"
+              className="smooth-transition hover:shadow-lg"
+            >
+              <Download className="mr-2 h-4 w-4" />
+              Download
+            </Button>
+          )}
         </div>
       </div>
     </Card>
